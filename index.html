@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OptiShrink Web - Compactador Extremo de Arquivos e PDFs</title>
+  <meta name="description" content="Comprima PDFs, imagens e arquivos ao extremo mantendo legibilidade e qualidade. 100% privado no navegador, sem upload para servidores.">
+  
+  <!-- Fontes & Ícones -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Estilos da Aplicação -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Bibliotecas de Processamento Client-Side (Locais + Fallback Online) -->
+  <!-- 1. PDF.js (Mozilla) para decodificação e renderização de alta precisão -->
+  <script src="vendor/pdf.min.js"></script>
+  <!-- 2. PDF-Lib para remontagem vetorial e estrutural de PDFs -->
+  <script src="vendor/pdf-lib.min.js"></script>
+  <!-- 3. fflate para compressão ZIP ultra-rápida na memória -->
+  <script src="vendor/fflate.min.js"></script>
+
+  <!-- Fallbacks caso aberto em ambiente restrito -->
+  <script>
+    if (typeof PDFLib === 'undefined') {
+      document.write('<script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"><\/script>');
+    }
+    if (typeof pdfjsLib === 'undefined') {
+      document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"><\/script>');
+    }
+    if (typeof fflate === 'undefined') {
+      document.write('<script src="https://cdn.jsdelivr.net/npm/fflate@0.8.2/umd/index.js"><\/script>');
+    }
+  </script>
+</head>
+<body>
+  <!-- Efeito de Fundo Luminoso -->
+  <div class="glow-orb orb-1"></div>
+  <div class="glow-orb orb-2"></div>
+
+  <!-- Cabeçalho -->
+  <header class="header">
+    <div class="header-container">
+      <div class="logo-area">
+        <div class="logo-icon">
+          <i class="fa-solid fa-compress-arrows-alt"></i>
+        </div>
+        <div>
+          <h1 class="logo-title">OptiShrink <span class="badge-tag">Web</span></h1>
+          <p class="logo-subtitle">Compactador Extremo • 100% Client-Side & Privado</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <span class="privacy-badge">
+          <i class="fa-solid fa-shield-halved"></i> Seus arquivos não saem do seu PC
+        </span>
+        <a href="https://github.com" target="_blank" class="btn-github" title="Ver código no GitHub">
+          <i class="fa-brands fa-github"></i> GitHub
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Conteúdo Principal -->
+  <main class="main-container">
+    
+    <!-- Hero & Apresentação -->
+    <section class="hero-section">
+      <h2 class="hero-title">
+        Compactação <span class="gradient-text">Máxima</span> com Preservação de Qualidade
+      </h2>
+      <p class="hero-desc">
+        Otimizado para documentos escaneados, ofícios de tribunais (PJe, SEI), relatórios e imagens. 
+        Reduza de <strong>60% a 90%</strong> do tamanho sem perder a legibilidade das letras e assinaturas.
+      </p>
+    </section>
+
+    <!-- Painel de Configurações de Qualidade -->
+    <section class="settings-card">
+      <div class="settings-header">
+        <div class="settings-title">
+          <i class="fa-solid fa-sliders"></i> Nível de Compactação
+        </div>
+        <span class="settings-hint">Escolha o equilíbrio ideal entre peso e nitidez</span>
+      </div>
+
+      <!-- Presets de Compressão -->
+      <div class="presets-grid">
+        <label class="preset-card">
+          <input type="radio" name="preset" value="light">
+          <div class="preset-content">
+            <div class="preset-badge light">Leve (~45%)</div>
+            <div class="preset-name">Alta Resolução</div>
+            <p class="preset-desc">DPI 110 • Qualidade 65%. Para documentos que já têm alta resolução e precisam manter detalhes finos.</p>
+          </div>
+        </label>
+
+        <label class="preset-card active">
+          <input type="radio" name="preset" value="balanced" checked>
+          <div class="preset-content">
+            <div class="preset-badge balanced">⭐ Recomendado (~65%)</div>
+            <div class="preset-name">Equilíbrio Perfeito</div>
+            <p class="preset-desc">DPI 96 • Qualidade 52%. Resolução nativa de tela. Reduz drasticamente mantendo letras e carimbos nítidos.</p>
+          </div>
+        </label>
+
+        <label class="preset-card">
+          <input type="radio" name="preset" value="extreme">
+          <div class="preset-content">
+            <div class="preset-badge extreme">Extremo (~85%)</div>
+            <div class="preset-name">Ultra Compacto</div>
+            <p class="preset-desc">DPI 75 • Qualidade 40%. Máxima redução para caber em e-mails e sistemas rígidos (SEI, PJe, WhatsApp).</p>
+          </div>
+        </label>
+      </div>
+
+      <!-- Detalhes Avançados (Colapsável) -->
+      <details class="advanced-accordion">
+        <summary>
+          <span><i class="fa-solid fa-gear"></i> Ajustes Avançados e Otimização para Processos</span>
+          <i class="fa-solid fa-chevron-down chevron"></i>
+        </summary>
+        <div class="advanced-grid">
+          <div class="adv-control">
+            <div class="adv-label-row">
+              <label for="sliderQuality">Qualidade Perceptual (JPEG/WebP):</label>
+              <span id="labelQualityValue" class="adv-val">52%</span>
+            </div>
+            <input type="range" id="sliderQuality" min="25" max="90" value="52" step="1">
+          </div>
+
+          <div class="adv-control">
+            <div class="adv-label-row">
+              <label for="sliderDpi">Resolução Alvo de PDF (DPI):</label>
+              <span id="labelDpiValue" class="adv-val">96 DPI</span>
+            </div>
+            <input type="range" id="sliderDpi" min="60" max="180" value="96" step="5">
+          </div>
+
+          <div class="adv-control full-width">
+            <label class="checkbox-label" style="margin-bottom: 8px;">
+              <input type="checkbox" id="checkGrayscale">
+              <span><strong>Modo Processos / Documentos P&B (Tons de Cinza + Realce de Texto)</strong>: Remove ruídos de fundo do scanner e gera até 40% a mais de economia com texto super nítido.</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="checkConvertToWebp" checked>
+              <span><strong>Converter imagens soltas (PNG/JPG) para WebP de última geração</strong></span>
+            </label>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <!-- Card de Divisão de Arquivo (Splitter) -->
+    <section class="split-card">
+      <div class="split-header">
+        <div class="split-title">
+          <div class="split-icon-box">
+            <i class="fa-solid fa-scissors"></i>
+          </div>
+          <div>
+            <div class="split-main-label">Dividir PDF em Partes</div>
+            <div class="split-sub-label">Corta o documento em múltiplos volumes menores e compacta cada um</div>
+          </div>
+        </div>
+        <label class="switch-container">
+          <input type="checkbox" id="checkEnableSplit">
+          <span class="switch-slider"></span>
+          <span class="switch-text" id="splitStatusText">Desativado</span>
+        </label>
+      </div>
+
+      <div class="split-body" id="splitBody" style="display: none;">
+        <div class="split-grid">
+          <label class="split-radio-box active" id="boxSplitFixed">
+            <input type="radio" name="splitType" value="fixedParts" checked>
+            <div class="split-radio-content">
+              <div class="split-radio-title">Dividir em X partes iguais</div>
+              <p class="split-radio-desc">Divide o total de páginas igualmente pela quantidade de arquivos desejada.</p>
+              <div class="split-input-row">
+                <input type="number" id="inputNumParts" min="2" max="50" value="3" class="input-modern">
+                <span class="input-tag">partes</span>
+              </div>
+            </div>
+          </label>
+
+          <label class="split-radio-box" id="boxSplitPages">
+            <input type="radio" name="splitType" value="pagesPerPart">
+            <div class="split-radio-content">
+              <div class="split-radio-title">Dividir a cada X páginas</div>
+              <p class="split-radio-desc">Gera um novo volume a cada bloco de páginas (ex: 50 páginas por volume).</p>
+              <div class="split-input-row">
+                <input type="number" id="inputPagesPerPart" min="5" max="500" value="50" class="input-modern" disabled>
+                <span class="input-tag">págs/volume</span>
+              </div>
+            </div>
+          </label>
+        </div>
+        <div class="split-footer-note">
+          <i class="fa-solid fa-circle-check"></i> <strong>Perfeito para limites do PJe e SEI:</strong> Cada parte é gerada já compactada com nome sequencial (ex: <em>evento 6_parte1.pdf, evento 6_parte2.pdf</em>).
+        </div>
+      </div>
+    </section>
+
+    <!-- Área de Arrastar e Soltar (Dropzone) -->
+    <section class="dropzone-area" id="dropzone">
+      <input type="file" id="fileInput" multiple accept=".pdf,image/*,.png,.jpg,.jpeg,.webp,.zip" class="file-input-hidden">
+      
+      <div class="dropzone-content">
+        <div class="dropzone-icon-pulse">
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+        </div>
+        <h3 class="dropzone-title">Arraste seus arquivos aqui ou <span class="highlight">clique para selecionar</span></h3>
+        <p class="dropzone-sub">
+          Suporta <strong>PDFs escaneados ou digitais</strong>, fotos (JPG, PNG, WebP) ou lotes de arquivos.
+        </p>
+        <div class="dropzone-tags">
+          <span class="file-tag"><i class="fa-solid fa-file-pdf"></i> PDFs em Lote</span>
+          <span class="file-tag"><i class="fa-solid fa-file-image"></i> Imagens</span>
+          <span class="file-tag"><i class="fa-solid fa-lock"></i> Processamento Local</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Fila de Arquivos & Resultados -->
+    <section class="queue-section" id="queueSection" style="display: none;">
+      <div class="queue-header">
+        <div class="queue-stats">
+          <h3 class="queue-title"><i class="fa-solid fa-list-check"></i> Fila de Arquivos (<span id="totalFilesCount">0</span>)</h3>
+          <span id="overallSavingsBadge" class="savings-pill" style="display: none;">Economia Total: -0%</span>
+        </div>
+        <div class="queue-actions">
+          <button id="btnProcessAll" class="btn btn-primary">
+            <i class="fa-solid fa-bolt"></i> Compactar Tudo
+          </button>
+          <button id="btnDownloadZip" class="btn btn-secondary" style="display: none;">
+            <i class="fa-solid fa-file-zipper"></i> Baixar Todos (.ZIP)
+          </button>
+          <button id="btnClearAll" class="btn btn-outline">
+            <i class="fa-solid fa-trash-can"></i> Limpar
+          </button>
+        </div>
+      </div>
+
+      <!-- Lista de Itens -->
+      <div class="queue-list" id="queueList"></div>
+    </section>
+
+    <!-- Modal de Prévia de Documento -->
+    <div class="modal-overlay" id="previewModal" style="display: none;">
+      <div class="modal-box">
+        <div class="modal-header">
+          <h4 class="modal-title" id="previewTitle">Visualização do Arquivo</h4>
+          <button class="modal-close" id="btnClosePreview">&times;</button>
+        </div>
+        <div class="modal-body" id="previewBody">
+          <!-- Renderização de iframe PDF ou Imagem via JS -->
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Rodapé -->
+  <footer class="footer">
+    <div class="footer-container">
+      <p>© 2026 OptiShrink Web • Desenvolvido para máxima eficiência e privacidade de documentos.</p>
+      <p class="footer-sub">Hospedado via GitHub Pages • 100% de processamento no navegador do usuário</p>
+    </div>
+  </footer>
+
+  <!-- Script Principal da Aplicação -->
+  <script src="app.js"></script>
+</body>
+</html>
